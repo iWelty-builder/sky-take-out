@@ -6,6 +6,7 @@ import com.sky.entity.Employee;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -34,4 +35,12 @@ public interface EmployeeMapper {
      * @param employeePageQueryDTO@return
      */
     List<Employee> page(EmployeePageQueryDTO employeePageQueryDTO);
+
+    /**
+     * 启用禁用员工账号
+     *
+     * @param employee
+     */
+    @Update("update employee set status=${status} where id=${id}")
+    void startOrStop(Employee employee);
 }
