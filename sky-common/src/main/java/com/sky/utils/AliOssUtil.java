@@ -7,11 +7,14 @@ import com.aliyun.oss.OSSException;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
 import java.io.ByteArrayInputStream;
 
 @Data
-@AllArgsConstructor
 @Slf4j
+@AllArgsConstructor
 public class AliOssUtil {
 
     private String endpoint;
@@ -22,12 +25,11 @@ public class AliOssUtil {
     /**
      * 文件上传
      *
-     * @param bytes
-     * @param objectName
-     * @return
+     * @param bytes 文件字节数组
+     * @param objectName 对象名称（文件路径+文件名）
+     * @return 文件访问URL
      */
     public String upload(byte[] bytes, String objectName) {
-
         // 创建OSSClient实例。
         OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
 
@@ -35,17 +37,14 @@ public class AliOssUtil {
             // 创建PutObject请求。
             ossClient.putObject(bucketName, objectName, new ByteArrayInputStream(bytes));
         } catch (OSSException oe) {
-            System.out.println("Caught an OSSException, which means your request made it to OSS, "
-                    + "but was rejected with an error response for some reason.");
-            System.out.println("Error Message:" + oe.getErrorMessage());
-            System.out.println("Error Code:" + oe.getErrorCode());
-            System.out.println("Request ID:" + oe.getRequestId());
-            System.out.println("Host ID:" + oe.getHostId());
+            log.error("Caught an OSSException, which means your request made it to OSS, but was rejected with an error response for some reason.");
+            log.error("Error Message: {}", oe.getErrorMessage());
+            log.error("Error Code: {}", oe.getErrorCode());
+            log.error("Request ID: {}", oe.getRequestId());
+            log.error("Host ID: {}", oe.getHostId());
         } catch (ClientException ce) {
-            System.out.println("Caught an ClientException, which means the client encountered "
-                    + "a serious internal problem while trying to communicate with OSS, "
-                    + "such as not being able to access the network.");
-            System.out.println("Error Message:" + ce.getMessage());
+            log.error("Caught an ClientException, which means the client encountered a serious internal problem while trying to communicate with OSS.");
+            log.error("Error Message: {}", ce.getMessage());
         } finally {
             if (ossClient != null) {
                 ossClient.shutdown();
@@ -61,7 +60,7 @@ public class AliOssUtil {
                 .append("/")
                 .append(objectName);
 
-        log.info("文件上传到:{}", stringBuilder.toString());
+        log.info("文件上传到: {}", stringBuilder.toString());
 
         return stringBuilder.toString();
     }
