@@ -27,14 +27,5 @@ public class DishDTO implements Serializable {
     //口味
     private List<DishFlavor> flavors = new ArrayList<>();
 
-    //添加创建时间字段
-    private LocalDateTime createTime;
-
-    //如果需要更新时间字段，也可以添加
-    private LocalDateTime updateTime;
-
-    private Long createUser;
-
-    private Long updateUser;
 
 }
