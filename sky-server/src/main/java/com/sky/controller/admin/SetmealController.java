@@ -1,7 +1,9 @@
 package com.sky.controller.admin;
 
 import com.sky.dto.SetmealDTO;
+import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
+import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,14 @@ public class SetmealController {
         setmealService.add(setmealDTO);
         return Result.success();
     }
+
+    @GetMapping("/page")
+    public Result<PageResult> page(SetmealPageQueryDTO pageQueryDTO){
+        log.info("分页查询 {}", pageQueryDTO);
+        PageResult p = setmealService.page(pageQueryDTO);
+        return Result.success(p);
+    }
+
 
 
 }
