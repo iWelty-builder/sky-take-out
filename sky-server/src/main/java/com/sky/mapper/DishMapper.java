@@ -49,4 +49,5 @@ public interface DishMapper {
     void update(Dish dish);
 
 
+    List<DishVO> getByCategoryId(Long categoryId);
 }

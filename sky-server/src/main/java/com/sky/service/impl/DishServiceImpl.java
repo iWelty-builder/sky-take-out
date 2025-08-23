@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -124,5 +125,17 @@ public class DishServiceImpl implements DishService {
         dish.setStatus(status);
         dishMapper.update(dish);
     }
+
+    @Override
+    public List<DishVO> getByCategoryId(Long categoryId) {
+
+
+        List<DishVO> dishVOList = dishMapper.getByCategoryId(categoryId);
+
+
+        return dishVOList;
+
+    }
+
 
 }
