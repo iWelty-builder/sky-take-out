@@ -2,10 +2,13 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.sky.constant.MessageConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
+import com.sky.entity.Dish;
 import com.sky.entity.Setmeal;
 import com.sky.entity.SetmealDish;
+import com.sky.exception.SetmealEnableFailedException;
 import com.sky.mapper.DishMapper;
 import com.sky.mapper.SetmealDishMapper;
 import com.sky.mapper.SetmealMapper;
@@ -17,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -118,5 +122,34 @@ public class SetmealServiceImpl implements SetmealService {
                     setmealDishMapper.deletesetmeal(id);
                 }
         );
+    }
+
+    @Override
+    public void startOrStop(Integer status, Long id) {
+        //设置套餐状态
+
+        //如果套餐中包含的未启售的菜品，则不能将套餐设置为启售
+        if(status==1){
+            List<SetmealDish> list = setmealDishMapper.setmealGetById(id);
+
+            //准备菜品List
+            List<Dish> dishes = new ArrayList<>();
+            list.forEach(setmealDish -> {
+                dishes.add(dishMapper.getById(setmealDish.getDishId()));
+            });
+            //检查菜品套餐内状态
+            for (Dish dish : dishes) {
+                if (dish.getStatus() == 0) {
+                    // 抛出业务异常，提示用户具体原因
+                    throw new SetmealEnableFailedException(MessageConstant.SETMEAL_ENABLE_FAILED);
+                }
+            }
+            setmealDishMapper.startOrStop(status,id);
+        }
+        //设置套餐为未启售
+        if (status==0){
+            setmealDishMapper.startOrStop(status,id);
+        }
+
     }
 }

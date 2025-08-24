@@ -18,4 +18,6 @@ public interface SetmealService {
     Setmeal update(SetmealDTO setmealDTO);
 
     void delete(List<Long> ids);
+
+    void startOrStop(Integer status, Long id);
 }
