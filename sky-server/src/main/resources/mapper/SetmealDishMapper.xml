@@ -6,7 +6,7 @@
         delete from sky_take_out.setmeal_dish  where setmeal_id=#{setmealId}
     </delete>
     <select id="setmealGetById" resultType="com.sky.entity.SetmealDish">
-        select setmeal_id,dish_id,name,price,copies from sky_take_out.setmeal_dish
+        select setmeal_id,dish_id,name,price,copies from sky_take_out.setmeal_dish where setmeal_id =#{setmealId}
     </select>
 
     <select id="getSetmealIdsByDishIds" resultType="java.lang.Long">
@@ -18,10 +18,16 @@
         </foreach>
     </select>
 
+
     <insert id="setmealadd">
-        insert into setmeal_dish (setmeal_id, dish_id, name, price, copies) VALUES
-        <foreach collection="setmealDish" item="smd" separator=",">
-            (#{smd.setmealId},#{smd.dishId},#{smd.name},#{smd.price},#{smd.copies})
+        INSERT INTO setmeal_dish (setmeal_id, dish_id, name, price, copies)
+        SELECT t.* FROM (
+        <foreach collection="setmealDish" item="smd" separator=" UNION ALL ">
+            SELECT #{smd.setmealId} as setmeal_id, #{smd.dishId} as dish_id, #{smd.name} as name, #{smd.price} as price, #{smd.copies} as copies
         </foreach>
+        <if test="setmealDish == null or setmealDish.size() == 0">
+            SELECT NULL as setmeal_id, NULL as dish_id, NULL as name, NULL as price, NULL as copies FROM DUAL WHERE 1=0
+        </if>
+        ) t
     </insert>
 </mapper>
