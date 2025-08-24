@@ -2,7 +2,6 @@ package com.sky.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.sky.constant.StatusConstant;
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
 import com.sky.entity.Setmeal;
@@ -83,7 +82,7 @@ public class SetmealServiceImpl implements SetmealService {
 
     @Transactional
     @Override
-    public void update(SetmealDTO setmealDTO) {
+    public Setmeal update(SetmealDTO setmealDTO) {
         //使用List接收setmealDTO内的套餐菜品数据
         List<SetmealDish> setmealDishes = setmealDTO.getSetmealDishes();
         //创建Setmeal对象接收其他新增套餐传递的信息
@@ -98,13 +97,26 @@ public class SetmealServiceImpl implements SetmealService {
 
         //删除对应套餐Id的菜品套餐关系数据，回归原始状态
         setmealDishMapper.deletesetmeal(setmealId);
-
         //遍历套餐菜品集合，为每一个套餐菜品设置套餐id
         for (SetmealDish setmealDish : setmealDishes) {
             setmealDish.setSetmealId(setmealId);
         }
-
         //调用SetmealDishMapper新增套餐菜品信息
         setmealDishMapper.setmealadd(setmealDishes);
-     }
+        return setmeal;
+    }
+
+    @Override
+    public void delete(List<Long> ids) {
+        ids.forEach(
+                id -> {
+                    SetmealVO setmeal = setmealMapper.getById(id);
+                    if(setmeal.getStatus() == 1){
+                        throw new RuntimeException("当前套餐正在售卖中，不能删除");
+                    }
+                    setmealMapper.deletebatch(id);
+                    setmealDishMapper.deletesetmeal(id);
+                }
+        );
+    }
 }

@@ -2,7 +2,7 @@ package com.sky.controller.admin;
 
 import com.sky.dto.SetmealDTO;
 import com.sky.dto.SetmealPageQueryDTO;
-import com.sky.entity.SetmealDish;
+import com.sky.entity.Setmeal;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.SetmealService;
@@ -10,6 +10,8 @@ import com.sky.vo.SetmealVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin/setmeal")
@@ -47,10 +49,17 @@ public class SetmealController {
     }
 
     @PutMapping
-    public Result<SetmealDTO> update(@RequestBody SetmealDTO setmealDTO){
+    public Result<Setmeal> update(@RequestBody SetmealDTO setmealDTO){
         log.info("修改套餐:{}",setmealDTO);
-        setmealService.update(setmealDTO);
-        return Result.success(setmealDTO);
+        Setmeal setmeal =setmealService.update(setmealDTO);
+        return Result.success(setmeal);
+    }
+
+    @DeleteMapping
+    public Result delete(@RequestParam List<Long> ids){
+        log.info("根据ID删除{}",ids);
+        setmealService.delete(ids);
+        return Result.success();
     }
 
 

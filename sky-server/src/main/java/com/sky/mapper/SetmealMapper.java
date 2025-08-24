@@ -4,6 +4,7 @@ import com.sky.annotation.AutoFill;
 import com.sky.entity.Setmeal;
 import com.sky.enumeration.OperationType;
 import com.sky.vo.SetmealVO;
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
@@ -28,5 +29,8 @@ public interface SetmealMapper {
 
     SetmealVO getById(Long id);
 
+    @AutoFill(OperationType.UPDATE)
     void update(Setmeal setmeal);
+
+    void deletebatch(Long id);
 }
