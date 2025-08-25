@@ -11,3 +11,8 @@ sky:
     access-key-secret: iMCy8DgFJ40tDnzHKs3s1iI3hVgunZ
     bucket-name: sky-take-out-uplode
     endpoint: oss-cn-shanghai.aliyuncs.com
+  redis:
+    port: 6379
+    host: localhost
+    password: 1234
+    database: 10
