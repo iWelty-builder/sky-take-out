@@ -39,5 +39,12 @@ public class ShoppingCartController {
         return Result.success();
     }
 
+    @PostMapping("/sub")
+    public Result deleteSingle(@RequestBody ShoppingCartDTO shoppingCartDTO){
+        log.info("Delete Single {}", shoppingCartDTO);
+        shoppingCartService.deleteSingle(shoppingCartDTO);
+        return Result.success();
+    }
+
 
 }
