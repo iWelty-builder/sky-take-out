@@ -18,6 +18,8 @@ import com.sky.vo.OrderSubmitVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.reactive.TransactionalOperator;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -34,7 +36,10 @@ public class OrderServiceImpl implements OrderService {
     ShoppingCartMapper shoppingCartMapper;
     @Autowired
     AddressBookMapper addressBookMapper;
+    @Autowired
+    private TransactionalOperator transactionalOperator;
 
+    @Transactional
     @Override
     public OrderSubmitVO submitOrder(OrdersSubmitDTO ordersSubmitDTO) {
         //处理异常，（地址簿为空，购物车为空）
