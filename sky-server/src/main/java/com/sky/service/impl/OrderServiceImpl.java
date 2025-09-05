@@ -176,8 +176,21 @@ public class OrderServiceImpl implements OrderService {
         return new PageResult(page.getTotal(), list);
     }
 
-
-
+    @Override
+    public OrderVO detail(Integer id) {
+         //创建要返回的对象
+        OrderVO orderVO = new OrderVO();
+         //设置当前用户ID
+        orderVO.setUserId(BaseContext.getCurrentId());
+         //根据ID查询订单详细
+         orderVO = orderMapper.getById(id);
+         //根据orders表的id查询对应的order_id订单详细
+        Long orderId = orderVO.getId();
+        List<OrderDetail> byOrderId = orderDetailMapper.getByOrderId(orderId);
+        //将detail和orders信息组合返回
+        orderVO.setOrderDetailList(byOrderId);
+        return  orderVO;
+    }
 
 
 }
