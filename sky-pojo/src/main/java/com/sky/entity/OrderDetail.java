@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 订单明细
@@ -44,4 +45,7 @@ public class OrderDetail implements Serializable {
 
     //图片
     private String image;
+
+    //下单时间
+    private LocalDateTime orderTime;
 }
