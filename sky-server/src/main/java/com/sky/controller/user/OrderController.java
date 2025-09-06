@@ -1,5 +1,6 @@
 package com.sky.controller.user;
 
+import com.google.common.primitives.Ints;
 import com.sky.context.BaseContext;
 import com.sky.dto.OrdersPageQueryDTO;
 import com.sky.dto.OrdersPaymentDTO;
@@ -60,6 +61,18 @@ public class OrderController {
     public Result<OrderVO> detail(@PathVariable Integer id){
         OrderVO orderVO = orderService.detail(id);
         return Result.success(orderVO);
+    }
+
+    @PutMapping("/cancel/{id}")
+    public Result cancelOrders(@PathVariable Integer id) throws Exception {
+        orderService.cancel(id);
+        return Result.success();
+    }
+
+    @PostMapping("/repetition/{id}")
+    public Result onceMore(@PathVariable Long id){
+        orderService.repetition(id);
+        return Result.success();
     }
 
 

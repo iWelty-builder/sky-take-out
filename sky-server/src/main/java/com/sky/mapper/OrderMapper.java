@@ -29,4 +29,7 @@ public interface OrderMapper {
     Page<Orders> pageQuery(OrdersPageQueryDTO ordersPageQueryDTO);
 
     OrderVO getById(Integer id);
+
+    @Select("select count(id) from orders where status = #{status}")
+    Integer countStatus(Integer status);
 }
