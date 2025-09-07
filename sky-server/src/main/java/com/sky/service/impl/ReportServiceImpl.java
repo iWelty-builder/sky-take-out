@@ -1,10 +1,15 @@
 package com.sky.service.impl;
 
+import com.sky.dto.GoodsSalesDTO;
+import com.sky.entity.Employee;
+import com.sky.entity.OrderDetail;
 import com.sky.entity.Orders;
+import com.sky.mapper.OrderDetailMapper;
 import com.sky.mapper.OrderMapper;
 import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.OrderReportVO;
+import com.sky.vo.SalesTop10ReportVO;
 import com.sky.vo.TurnoverReportVO;
 import com.sky.vo.UserReportVO;
 import io.swagger.models.auth.In;
@@ -25,6 +30,8 @@ public class ReportServiceImpl implements ReportService {
     private OrderMapper orderMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private OrderDetailMapper orderDetailMapper;
 
 
     @Override
@@ -137,6 +144,26 @@ public class ReportServiceImpl implements ReportService {
                 .totalOrderCount(totalOrderCount)
                 .validOrderCount(validOrderCount)
                 .orderCompletionRate(orderCompletionRate)
+                .build();
+    }
+
+    @Override
+    public SalesTop10ReportVO getTop10Statistics(LocalDate begin, LocalDate end) {
+        LocalDateTime beginTime = LocalDateTime.of(begin, LocalTime.MIN);
+        LocalDateTime endTime = LocalDateTime.of(end, LocalTime.MAX);
+
+        List<GoodsSalesDTO> top10 = orderMapper.getSalesTop10(beginTime, endTime);
+        List<String> name = new ArrayList<>();
+        List<Integer> count = new ArrayList<>();
+
+        for (GoodsSalesDTO goodsSalesDTO : top10) {
+            name.add(goodsSalesDTO.getName());
+            count.add(goodsSalesDTO.getNumber());
+        }
+
+       return SalesTop10ReportVO.builder()
+                .nameList(StringUtils.join(name,","))
+                .numberList(StringUtils.join(count,","))
                 .build();
     }
 
