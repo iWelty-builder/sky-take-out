@@ -17,4 +17,5 @@ public interface UserMapper {
     Integer getTotal(Map map);
 
     Integer getdNewUser(Map map);
+
 }
