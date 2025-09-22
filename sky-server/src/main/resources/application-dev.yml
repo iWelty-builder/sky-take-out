@@ -7,8 +7,8 @@ sky:
     username: root
     password: 1234
   alioss:
-    access-key-id:
-    access-key-secret:
+    access-key-id: {Your access id}
+    access-key-secret: {Your access secret}
     bucket-name: sky-take-out-uplode
     endpoint: oss-cn-shanghai.aliyuncs.com
   redis:
